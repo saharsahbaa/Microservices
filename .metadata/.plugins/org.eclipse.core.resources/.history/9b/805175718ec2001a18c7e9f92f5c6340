@@ -1,0 +1,5 @@
+FROM openjdk:8
+COPY ./target/demo-0.0.1-SNAPSHOT.jar /usr/src/myplayer/player.jar
+VOLUME ./target/:/usr/src/myplayer
+EXPOSE 8080
+ENTRYPOINT ["java","-Dspring.data.mongodb.uri=mongodb://player-container-db:27017/","-jar","-Djava.rmi.server.hostname=0.0.0.0", "player.jar"]

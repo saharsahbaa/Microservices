@@ -1,0 +1,85 @@
+package score.microservice.model;
+
+import java.sql.Date;
+import java.util.List;
+
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.aggregation.VariableOperators.Map;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
+import score.microservice.Views;
+
+@Document(collection = "score")
+public class Score {
+	@Id
+	@NotBlank
+	@JsonView(Views.class)
+	private String scoreid;
+	@JsonView(Views.class)
+	private Long score;
+	@NotBlank
+	@JsonView(Views.class)
+	private String player;
+	@NotBlank
+	@JsonView(Views.class)
+	private String gamecode;
+	@JsonView(Views.class)
+	private java.util.Date date;
+	public List<java.util.Map<String, String>> history;
+	
+	
+	public Score(@NotBlank String scoreid, Long score, @NotBlank String player, @NotBlank String gamecode, Date date,
+			List<java.util.Map<String, String>> history) {
+		super();
+		this.scoreid = scoreid;
+		this.score = score;
+		this.player = player;
+		this.gamecode = gamecode;
+		this.date = date;
+		this.history = history;
+	}
+	public String getScoreid() {
+		return scoreid;
+	}
+	public void setScoreid(String scoreid) {
+		this.scoreid = scoreid;
+	}
+	public Long getScore() {
+		return score;
+	}
+	public void setScore(Long score) {
+		this.score = score;
+	}
+	public String getPlayer() {
+		return player;
+	}
+	public void setPlayer(String player) {
+		this.player = player;
+	}
+	public String getGamecode() {
+		return gamecode;
+	}
+	public void setGamecode(String gamecode) {
+		this.gamecode = gamecode;
+	}
+	
+	public java.util.Date getDate() {
+		return date;
+	}
+	public void setDate(java.util.Date date) {
+		this.date = date;
+	}
+
+	
+	public List<java.util.Map<String,String>> getHistory() {
+		return history;
+	}
+	public void setHistory(List<java.util.Map<String, String>> history) {
+		this.history = history;
+	}
+	
+}
