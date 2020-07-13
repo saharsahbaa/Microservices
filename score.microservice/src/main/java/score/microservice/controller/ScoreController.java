@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -94,10 +95,35 @@ public class ScoreController {
 		
 	}
 	//DELETE ALL SCORES
-	@DeleteMapping("/score")
+	@DeleteMapping
 	public ResponseEntity<?> deleteAllScores(){
 		repo.deleteAll();
 		return ResponseEntity.status(200).body("DELETED!");
 	}
+	
+	//Getting By ScoreID
+	@GetMapping("/{id}")
+	public ResponseEntity<?>  getPlayerByID(@PathVariable String id){
+		try {
+					
+					Score s = repo.findById(id).get();
+					return ResponseEntity.ok(s);
+					
+				} catch (Exception e) {
+					return ResponseEntity.status(404).body("Not Found!");
+				}
+		}
+	//Delete Score By ScoreID
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> DeleteByID(@PathVariable String id){
+		try {
+			repo.deleteById(id);
+			return ResponseEntity.ok("DELETE It!");
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(404).body("Not Found!");
+		}
+	}
+			
 	
 }
