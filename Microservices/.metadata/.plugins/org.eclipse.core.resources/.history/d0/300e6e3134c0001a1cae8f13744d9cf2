@@ -1,0 +1,17 @@
+package player.microservice.repository;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import player.microservice.model.Player;
+
+@Repository
+//@FeignClient(name = "Player")
+public interface PlayerRepository extends MongoRepository<Player, String>{
+	//@RequestMapping("player/{nickname}")
+	Player findByNickname(@PathVariable(value = "nickname")String nickname);
+
+}

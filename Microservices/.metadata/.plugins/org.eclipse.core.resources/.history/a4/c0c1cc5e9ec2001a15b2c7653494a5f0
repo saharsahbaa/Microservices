@@ -1,0 +1,9 @@
+#SpringBoot
+#spring.application.name=Player
+server.address=localhost
+server.port=8080
+#MongoDB
+spring.data.mongodb.host=player-container-db
+#player-container-db
+spring.data.mongodb.database=player-db
+spring.data.mongodb.port=27017

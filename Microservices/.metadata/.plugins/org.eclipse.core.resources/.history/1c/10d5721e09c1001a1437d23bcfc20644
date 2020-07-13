@@ -1,0 +1,92 @@
+package score.microservice.controller;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoAction;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.annotation.JsonView;
+import com.mongodb.BasicDBObject;
+
+import score.microservice.Views;
+import score.microservice.model.Game;
+import score.microservice.model.Player;
+import score.microservice.model.Score;
+import score.microservice.repository.ScoreRepository;
+
+@RestController
+@RequestMapping("/score")
+public class ScoreController {
+	@Autowired
+	private ScoreRepository repo;
+	@Autowired
+	private RestTemplate restTemplate;
+	@Autowired
+	private MongoTemplate mongoTemplate;
+	private ArrayList<Map<String, Object>> histori = new ArrayList<Map<String,Object>>();
+	private Map<String, Object> map = new HashMap<String, Object>();
+	 private String Url = "http://localhost:8080/player/";
+	 private String Uri = "http://localhost:8081/game/";
+	
+	//POST Score
+	@PostMapping
+	public ResponseEntity<?> createScore(@RequestBody @JsonView(Views.class) @Valid  Score score) {
+		try {
+			Player player = restTemplate.getForObject(Url+score.getPlayer(), Player.class);
+			Game game = restTemplate.getForObject(Uri+score.getGamecode(), Game.class);
+			map.put("score", score.getScore());
+			map.put("date", score.getDate());
+			histori.clear();
+			histori.add(map);
+			score.setHistory(histori);
+			repo.save(score);
+			return ResponseEntity.status(201).body("Created!");
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(400).body("Bad Request!");
+		}		
+		
+	}
+	
+	//GET ALL SCORES
+	@GetMapping
+	public ResponseEntity<?> getAllScores(){
+		try {
+			List<Score> score = repo.findAll();
+			return ResponseEntity.ok(score);
+		} catch (Exception e) {
+			return ResponseEntity.status(400).body("There Is A problem!");
+		}
+	}
+	//UPDATE SCORE
+	@PutMapping("/{player}")
+	public ResponseEntity<?> updateScore(@PathVariable("player")String player,
+			@RequestBody @Valid  Score score){
+		List<Score> s = repo.findByPlayerOrderByScoreDesc(player);
+		if(s!=null) {
+			map.put("score", score.getScore());
+			map.put("date", score.getDate());
+			s.get(0).history.add(map);
+			 
+			repo.save(s.get(0));
+			return ResponseEntity.ok(s);			
+		} else {
+			return ResponseEntity.status(400).body("RIDIIIII");
+		}
+	}
+	
+}

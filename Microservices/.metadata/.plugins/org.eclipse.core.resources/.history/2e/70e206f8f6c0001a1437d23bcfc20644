@@ -1,0 +1,32 @@
+package score.microservice.model;
+
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
+import java.lang.String;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
+import score.microservice.Views;
+
+@Document(collection = "score")
+public class Score {
+	
+	@NotBlank
+	@JsonView(Views.class)
+	private String player;
+	@NotBlank
+	@JsonView(Views.class)
+	private String gamecode;
+	@JsonView(Views.class)
+	private Long score;	
+	@JsonView(Views.class)
+	private Date date;
+	public ArrayList<Map<String, Object>> history;
+	
+	
+}

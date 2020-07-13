@@ -1,0 +1,66 @@
+version: "3"
+services:
+    player-docker:
+        build: ./player.microservice/target
+        image: player
+        container_name: "player-docker"
+        restart: always
+        ports:
+            - 8080:8080
+        depends_on:
+            - player-container-db
+    game-docker:
+        build:
+            context: ./
+            dockerfile: ./game.microservice/target/Dockerfile
+        image: game
+        container_name: "game-docker"
+        restart: always
+        ports:
+            - 8081:8081
+        depends_on:
+            - game-container-db
+    score-docker:
+        build:
+            context: ./
+            dockerfile: ./score.microservice/target/Dockerfile
+        image: score
+        container_name: "score-docker"
+        restart: always
+        ports:
+            - 8082:8082
+        depends_on:
+            - score-container-db
+            - player-docker
+            - game-docker
+        links:
+            - player-docker
+            - game-docker
+    player-container-db:
+        image: mongo
+        container_name: "player-container-db"
+        volumes:
+            - mongodata:/data/db
+        ports:
+            - 27017
+        restart: always
+    game-container-db:
+        image: mongo
+        container_name: "game-container-db"
+        volumes:
+            - mongodata1:/data/db
+        ports:
+            - 27017
+        restart: always
+    score-container-db:
+        image: mongo
+        container_name: "score-container-db"
+        volumes:
+            - mongodata2:/data/db
+        ports:
+            - 27017
+        restart: always
+volumes:
+    mongodata:
+    mongodata1:
+    mongodata2:

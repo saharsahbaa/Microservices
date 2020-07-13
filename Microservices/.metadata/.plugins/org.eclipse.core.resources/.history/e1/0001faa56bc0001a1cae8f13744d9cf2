@@ -1,0 +1,92 @@
+package score.microservice.model;
+
+import java.sql.Date;
+import java.util.List;
+import java.util.Map;
+import java.lang.String;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonView;
+
+import score.microservice.Views;
+
+@Document(collection = "score")
+public class Score {
+	@Id
+	@NotBlank
+	@JsonView(Views.class)
+	private String scoreid;
+	@JsonView(Views.class)
+	private Long score;
+	@NotBlank
+	@JsonView(Views.class)
+	private List<String> player;
+	@NotBlank
+	@JsonView(Views.class)
+	private List<String> gamecode;
+	@JsonView(Views.class)
+	private java.util.Date date;
+	public List<Map<String, String>> history;
+	
+	
+	public Score(@NotBlank String scoreid, Long score, @NotBlank @NotBlank List<String> player, @NotBlank @NotBlank List<String> gamecode, Date date,
+			List<Map<String, String>> history) {
+		super();
+		this.scoreid = scoreid;
+		this.score = score;
+		this.player = player;
+		this.gamecode = gamecode;
+		this.date = date;
+		this.history = history;
+	}
+	public String getScoreid() {
+		return scoreid;
+	}
+	public void setScoreid(String scoreid) {
+		this.scoreid = scoreid;
+	}
+	public Long getScore() {
+		return score;
+	}
+	public void setScore(Long score) {
+		this.score = score;
+	}
+	public List<String> getPlayer() {
+		return player;
+	}
+	public void setPlayer(@NotBlank List<String> player) {
+		this.player = player;
+	}
+	public List<String> getGamecode() {
+		return gamecode;
+	}
+	public void setGamecode(@NotBlank List<String> gamecode) {
+		this.gamecode = gamecode;
+	}
+	
+	public java.util.Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	public List<Map<String, String>> getHistory() {
+		return history;
+	}
+	public void setHistory(List<Map<String, String>> history) {
+		this.history = history;
+	}
+	@Override
+	public String toString() {
+		return "Score [scoreid=" + scoreid + ", score=" + score + ", player=" + player + ", gamecode=" + gamecode
+				+ ", date=" + date + ", history=" + history + "]";
+	}
+	
+
+	
+	
+	
+}
