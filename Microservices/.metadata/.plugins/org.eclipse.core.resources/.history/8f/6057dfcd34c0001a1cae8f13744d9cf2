@@ -1,9 +1,0 @@
-#SpringBoot
-spring.application.name=Score
-server.address=localhost
-server.port=8082
-#MongoDB
-spring.data2.mongodb.host=localhost
-#score-container-db
-spring.data2.mongodb.database=score-db
-spring.data2.mongodb.port=27017

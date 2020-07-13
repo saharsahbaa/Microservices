@@ -1,4 +1,0 @@
-FROM openjdk:8
-COPY ./target/demo-0.0.1-SNAPSHOT.jar score.jar
-EXPOSE 8082
-ENTRYPOINT ["java","-Dspring.data.mongodb.uri=mongodb://score-container-db:27017/","-jar","-Djava.rmi.server.hostname=0.0.0.0", "score.jar"]
